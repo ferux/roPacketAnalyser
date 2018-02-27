@@ -1,0 +1,7 @@
+**/actions.ini
+**/*.json
+**/*.png
+**/*.exe
+todo
+**/.vscode
+**/*.sniff
