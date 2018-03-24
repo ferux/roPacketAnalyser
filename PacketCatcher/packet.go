@@ -54,7 +54,7 @@ func ParseChannel(conn io.Reader) chan *Packet {
 					isPacketSent = true
 					continue
 				case "592c":
-					fallthrough
+					continue
 				case "007f":
 					continue
 				}
@@ -73,10 +73,25 @@ func ParseChannel(conn io.Reader) chan *Packet {
 				if takeLength >= r.Len() {
 					takeLength = r.Len()
 				}
+				if takeLength == 0 {
+					continue
+				}
 				body := r.Next(takeLength)
 				packetc <- New(packetID, body, isPacketSent)
 			}
 		}
+	}()
+	return packetc
+}
+
+func ParseChannelV2(conn io.Reader) chan *Packet {
+	var isPacketSent bool
+	packetc := make(chan *Packet, 0)
+	// buf := make([]byte, 65536)
+	// bufreader := bufio.NewReader(conn)
+	go func() {
+		p := New("meh", []byte("y"), isPacketSent)
+		packetc <- p
 	}()
 	return packetc
 }
@@ -94,6 +109,7 @@ func (p *Packet) String() string {
 	}
 	return fmt.Sprintf("%s -> [%s] (PacketID: %s) Length: %d", direction, name, p.PacketID, len(p.Body))
 }
+
 //GetVarID from packetVars
 func GetVarID(i uint16) string {
 	res, ok := packetVars[i]

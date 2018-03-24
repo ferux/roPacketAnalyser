@@ -28,6 +28,7 @@ func init() {
 	packetTypes["07f6"] = packet07f6ToMap //PACKET_ZC_NOTIFY_EXP
 	packetTypes["022e"] = packet022eToMap //PACKET_ZC_PROPERTY_HOMUN
 	packetTypes["00b0"] = packet00b0ToMap //PACKET_ZC_PAR_CHANGE
+	packetTypes["09dd"] = packet09ddToMap //PACKET_ZC_ACTOR_EXISTS
 	log.Printf("[packetTypes ] Successfuly imported %6d rows\n", len(packetTypes))
 }
 
@@ -232,4 +233,59 @@ func (p *Packet0069) Populate(m map[string]interface{}) error {
 	Sex           uint8
 	return nil
 }
+*/
+func packet09ddToMap(p *PacketCatcher.Packet) map[string]interface{} {
+	m := make(map[string]interface{}, 0)
+	b := bytes.NewBuffer(p.Body)
+	m["ObjectType"] = BytesToUint8(b)
+	// m["ID"] = BytesToByteArray(b, 4)
+	// m["CharID"] = BytesToByteArray(b, 4)
+	m["ID"] = BytesToUint32(b)
+	m["CharID"] = BytesToUint32(b)
+	m["WalkSpeed"] = BytesToInt16(b)
+	m["Opt1"] = BytesToInt16(b)
+	m["Opt2"] = BytesToInt16(b)
+	m["Option"] = BytesToInt32(b)
+	m["Type"] = BytesToInt16(b)
+	m["HairStyle"] = BytesToInt16(b)
+	m["Weapon"] = BytesToInt16(b)
+	m["Shield"] = BytesToInt16(b)
+	m["LowHead"] = BytesToInt16(b)
+	m["TopHead"] = BytesToInt16(b)
+	m["MidHead"] = BytesToInt16(b)
+	m["HairColor"] = BytesToInt16(b)
+	m["ClothesColor"] = BytesToInt16(b)
+	m["HeadDir"] = BytesToInt16(b)
+	m["Costume"] = BytesToInt16(b)
+	// m["GuildID"] = BytesToByteArray(b, 4)
+	// m["EmblemID"] = BytesToByteArray(b, 2)
+	m["GuildID"] = BytesToUint32(b)
+	m["EmblemID"] = BytesToUint16(b)
+	m["Manner"] = BytesToInt16(b)
+	m["Opt3"] = BytesToInt32(b)
+	m["Stance"] = BytesToUint8(b)
+	m["Sex"] = BytesToUint8(b)
+	m["Coords"] = BytesToByteArray(b, 3)
+	// m["CoordX"] = BytesToUint8(b)
+	// m["CoordY"] = BytesToUint8(b)
+	// m["CoordZ"] = BytesToUint8(b)
+	m["XSize"] = BytesToUint8(b)
+	m["YSize"] = BytesToUint8(b)
+	m["Act"] = BytesToUint8(b)
+	m["Lv"] = BytesToInt16(b)
+	m["Font"] = BytesToInt16(b)
+	//'09DD' => ['actor_exists', 'a9 Z*', [qw()]],
+	m["Opt4"] = string(BytesToByteArray(b, 9))
+	m["Name"] = string(BytesToByteArray(b, b.Len()))
+	return m
+}
+
+/*actor_exists -- 09DD
+let packet09DD = new Parser().endianess('little').int16('len').uint8('object_type').string('ID', {length: "len"}).string('charID', {length: "len"}).int16('walk_speed')
+.int16('opt1').int16('opt2').int32('option').int16('type').int16('hair_style').int16('weapon').int16('shield').int16('lowhead')
+.int16('tophead').int16('midhead').int16('hair_color').int16('clothes_color').int16('head_dir').int16('costume').string('guildID', {length: "len"})
+.string('emblemID', {length: "len"}).int16('manner').int32('opt3').uint8('stance').uint8('sex').string('coords', {length: "len"})
+.uint8('xSize').uint8('ySize').uint8('act').int16('lv').int16('font')
+.string('opt4', {length: "len"})
+.string('name', {length: "len"});
 */

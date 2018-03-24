@@ -54,3 +54,21 @@ func BytesToByteArray(buf *bytes.Buffer, length int) []byte {
 	binary.Read(buf, binary.LittleEndian, i)
 	return i
 }
+
+/*
+	p[0] p[1] p[2].
+	x = p[0] << 2 = (0011 1100)
+	x = p[1] & 0xC0 >> 6 | x
+	y = p[1] << & 0x3FF | (p[2] &0xF0 >> 4)
+	dir = p[2] & 0xf
+*/
+//BytesToXYDir converts byte array with length = 3 to x, y, dir
+func BytesToXYDir(bytes []uint8) (x, y int16, d uint8) {
+	if len(bytes) != 3 {
+		return
+	}
+	x = (int16(bytes[0]) << 2) | (int16(bytes[1]) & 0xC0 >> 6)
+	y = (int16(bytes[1]) << 4 & 0x3ff) | (int16(bytes[2]&0xF0) >> 4)
+	d = bytes[2] & 0xF
+	return
+}
