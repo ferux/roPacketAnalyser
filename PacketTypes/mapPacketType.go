@@ -29,6 +29,8 @@ func init() {
 	packetTypes["022e"] = packet022eToMap //PACKET_ZC_PROPERTY_HOMUN
 	packetTypes["00b0"] = packet00b0ToMap //PACKET_ZC_PAR_CHANGE
 	packetTypes["09dd"] = packet09ddToMap //PACKET_ZC_ACTOR_EXISTS
+	packetTypes["09db"] = packet09dbToMap //PACKET_ZC_ACTOR_MOVED
+	packetTypes["09dc"] = packet09ddToMap //PACKET_ZC_ACTOR_CONNECTED
 	log.Printf("[packetTypes ] Successfuly imported %6d rows\n", len(packetTypes))
 }
 
@@ -238,8 +240,6 @@ func packet09ddToMap(p *PacketCatcher.Packet) map[string]interface{} {
 	m := make(map[string]interface{}, 0)
 	b := bytes.NewBuffer(p.Body)
 	m["ObjectType"] = BytesToUint8(b)
-	// m["ID"] = BytesToByteArray(b, 4)
-	// m["CharID"] = BytesToByteArray(b, 4)
 	m["ID"] = BytesToUint32(b)
 	m["CharID"] = BytesToUint32(b)
 	m["WalkSpeed"] = BytesToInt16(b)
@@ -257,8 +257,6 @@ func packet09ddToMap(p *PacketCatcher.Packet) map[string]interface{} {
 	m["ClothesColor"] = BytesToInt16(b)
 	m["HeadDir"] = BytesToInt16(b)
 	m["Costume"] = BytesToInt16(b)
-	// m["GuildID"] = BytesToByteArray(b, 4)
-	// m["EmblemID"] = BytesToByteArray(b, 2)
 	m["GuildID"] = BytesToUint32(b)
 	m["EmblemID"] = BytesToUint16(b)
 	m["Manner"] = BytesToInt16(b)
@@ -266,15 +264,11 @@ func packet09ddToMap(p *PacketCatcher.Packet) map[string]interface{} {
 	m["Stance"] = BytesToUint8(b)
 	m["Sex"] = BytesToUint8(b)
 	m["Coords"] = BytesToByteArray(b, 3)
-	// m["CoordX"] = BytesToUint8(b)
-	// m["CoordY"] = BytesToUint8(b)
-	// m["CoordZ"] = BytesToUint8(b)
 	m["XSize"] = BytesToUint8(b)
 	m["YSize"] = BytesToUint8(b)
 	m["Act"] = BytesToUint8(b)
 	m["Lv"] = BytesToInt16(b)
 	m["Font"] = BytesToInt16(b)
-	//'09DD' => ['actor_exists', 'a9 Z*', [qw()]],
 	m["Opt4"] = string(BytesToByteArray(b, 9))
 	m["Name"] = string(BytesToByteArray(b, b.Len()))
 	return m
@@ -289,3 +283,80 @@ let packet09DD = new Parser().endianess('little').int16('len').uint8('object_typ
 .string('opt4', {length: "len"})
 .string('name', {length: "len"});
 */
+
+func packet09dbToMap(p *PacketCatcher.Packet) map[string]interface{} {
+	m := make(map[string]interface{}, 0)
+	b := bytes.NewBuffer(p.Body)
+	m["ObjectType"] = BytesToUint8(b)
+	m["ID"] = BytesToUint32(b)
+	m["CharID"] = BytesToUint32(b)
+	m["WalkSpeed"] = BytesToInt16(b)
+	m["Opt1"] = BytesToInt16(b)
+	m["Opt2"] = BytesToInt16(b)
+	m["Option"] = BytesToInt32(b)
+	m["Type"] = BytesToInt16(b)
+	m["HairStyle"] = BytesToInt16(b)
+	m["Weapon"] = BytesToInt16(b)
+	m["Shield"] = BytesToInt16(b)
+	m["LowHead"] = BytesToInt16(b)
+	m["Tick"] = BytesToUint32(b)
+	m["TopHead"] = BytesToInt16(b)
+	m["MidHead"] = BytesToInt16(b)
+	m["HairColor"] = BytesToInt16(b)
+	m["ClothesColor"] = BytesToInt16(b)
+	m["HeadDir"] = BytesToInt16(b)
+	m["Costume"] = BytesToInt16(b)
+	m["GuildID"] = BytesToUint32(b)
+	m["EmblemID"] = BytesToUint16(b)
+	m["Manner"] = BytesToInt16(b)
+	m["Opt3"] = BytesToInt32(b)
+	m["Stance"] = BytesToUint8(b)
+	m["Sex"] = BytesToUint8(b)
+	m["Coords"] = BytesToByteArray(b, 6)
+	m["XSize"] = BytesToUint8(b)
+	m["YSize"] = BytesToUint8(b)
+	m["Lv"] = BytesToInt16(b)
+	m["Font"] = BytesToInt16(b)
+	m["Opt4"] = string(BytesToByteArray(b, 9))
+	m["Name"] = string(BytesToByteArray(b, b.Len()))
+	return m
+}
+
+func packet09dcToMap(p *PacketCatcher.Packet) map[string]interface{} {
+	m := make(map[string]interface{}, 0)
+	b := bytes.NewBuffer(p.Body)
+	m["ObjectType"] = BytesToUint8(b)
+	m["ID"] = BytesToUint32(b)
+	m["CharID"] = BytesToUint32(b)
+	m["WalkSpeed"] = BytesToInt16(b)
+	m["Opt1"] = BytesToInt16(b)
+	m["Opt2"] = BytesToInt16(b)
+	m["Option"] = BytesToInt32(b)
+	m["Type"] = BytesToInt16(b)
+	m["HairStyle"] = BytesToInt16(b)
+	m["Weapon"] = BytesToInt16(b)
+	m["Shield"] = BytesToInt16(b)
+	m["LowHead"] = BytesToInt16(b)
+	m["TopHead"] = BytesToInt16(b)
+	m["MidHead"] = BytesToInt16(b)
+	m["HairColor"] = BytesToInt16(b)
+	m["ClothesColor"] = BytesToInt16(b)
+	m["HeadDir"] = BytesToInt16(b)
+	m["Costume"] = BytesToInt16(b)
+	m["GuildID"] = BytesToUint32(b)
+	m["EmblemID"] = BytesToUint16(b)
+	m["Manner"] = BytesToInt16(b)
+	m["Opt3"] = BytesToInt32(b)
+	m["Stance"] = BytesToUint8(b)
+	m["Sex"] = BytesToUint8(b)
+	m["Coords"] = BytesToByteArray(b, 3)
+	m["XSize"] = BytesToUint8(b)
+	m["YSize"] = BytesToUint8(b)
+	m["Lv"] = BytesToInt16(b)
+	m["Font"] = BytesToInt16(b)
+	m["Opt4"] = string(BytesToByteArray(b, 9))
+	m["Name"] = string(BytesToByteArray(b, b.Len()))
+	return m
+}
+
+//'0A30' => ['actor_info', 'a4 Z24 Z24 Z24 Z24 x4', [qw(ID name partyName guildName guildTitle)]],

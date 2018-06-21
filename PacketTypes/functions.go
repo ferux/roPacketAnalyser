@@ -64,11 +64,30 @@ func BytesToByteArray(buf *bytes.Buffer, length int) []byte {
 */
 //BytesToXYDir converts byte array with length = 3 to x, y, dir
 func BytesToXYDir(bytes []uint8) (x, y int16, d uint8) {
-	if len(bytes) != 3 {
-		return
+	if len(bytes) == 3 { //int16 x0, y0, direction
+		x = (int16(bytes[0]) << 2) | (int16(bytes[1]) & 0xC0 >> 6)
+		y = (int16(bytes[1]) << 4 & 0x3ff) | (int16(bytes[2]&0xF0) >> 4)
+		d = bytes[2] & 0xF
 	}
-	x = (int16(bytes[0]) << 2) | (int16(bytes[1]) & 0xC0 >> 6)
-	y = (int16(bytes[1]) << 4 & 0x3ff) | (int16(bytes[2]&0xF0) >> 4)
-	d = bytes[2] & 0xF
+	if len(bytes) == 6 { //int16 x0, y0, x1, y1, uint8 sx0, sy0
+		x = (int16(bytes[0]) << 2) | (int16(bytes[1]) & 0xC0 >> 6)
+		y = (int16(bytes[1]) << 4 & 0x3ff) | (int16(bytes[2]&0xF0) >> 4)
+		d = bytes[2] & 0xF
+		//TODO
+	}
 	return
 }
+
+/*
+	p[0] = (uint8)(x0>>2);
+	p[1] = (uint8)((x0<<6) | ((y0>>4)&0x3f));
+	p[2] = (uint8)((y0<<4) | ((x1>>6)&0x0f));
+
+	p[3] = (uint8)((x1<<2) | ((y1>>8)&0x03));
+	p[4] = (uint8)y1;
+	p[5] = (uint8)((sx0<<4) | (sy0&0x0f));
+
+	p[0] = (uint8)(x>>2);
+	p[1] = (uint8)((x<<6) | ((y>>4)&0x3f));
+	p[2] = (uint8)((y<<4) | (dir&0xf));
+*/

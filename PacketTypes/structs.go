@@ -20,6 +20,8 @@ var (
 	_ PacketType = (*Packet00B0)(nil)
 	_ PacketType = (*Packet0069)(nil)
 	_ PacketType = (*Packet09DD)(nil)
+	_ PacketType = (*Packet09DB)(nil)
+	_ PacketType = (*Packet09DC)(nil)
 )
 
 //Replace assignments use ^\s*\w\[\"(\w+)\"\]\s\=\sBytesTo(\w+).*$
@@ -396,7 +398,7 @@ func (p *Packet0069) Populate(m map[string]interface{}) error {
 	return nil
 }
 
-//Packet09DD -- ACTOR_EXISTS
+//Packet09DD -- PACKET_ZC_ACTOR_EXISTS
 type Packet09DD struct {
 	// PacketLength uint16
 	ObjectType   uint8
@@ -467,6 +469,160 @@ func (p *Packet09DD) Populate(m map[string]interface{}) error {
 	p.XSize = m["XSize"].(uint8)
 	p.YSize = m["YSize"].(uint8)
 	p.Act = m["Act"].(uint8)
+	p.Lv = m["Lv"].(int16)
+	p.Font = m["Font"].(int16)
+	p.Opt4 = m["Opt4"].(string)
+	p.Name = m["Name"].(string)
+	return nil
+}
+
+//Packet09DB -- PACKET_ZC_ACTOR_MOVED
+type Packet09DB struct {
+	// PacketLength uint16
+	ObjectType   uint8
+	ID           uint32
+	CharID       uint32
+	WalkSpeed    int16
+	Opt1         int16
+	Opt2         int16
+	Option       int32
+	Type         int16
+	HairStyle    int16
+	Weapon       int16
+	Shield       int16
+	LowHead      int16
+	Tick         uint32
+	TopHead      int16
+	MidHead      int16
+	HairColor    int16
+	ClothesColor int16
+	HeadDir      int16
+	Costume      int16
+	GuildID      uint32
+	EmblemID     uint16
+	Manner       int16
+	Opt3         int32
+	Stance       uint8
+	Sex          uint8
+	CoordX       int16
+	CoordY       int16
+	Direction    uint8
+	XSize        uint8
+	YSize        uint8
+	Lv           int16
+	Font         int16
+	Opt4         string
+	Name         string
+}
+
+//Populate the packet
+func (p *Packet09DB) Populate(m map[string]interface{}) error {
+	p.ObjectType = m["ObjectType"].(uint8)
+	p.ID = m["ID"].(uint32)
+	p.CharID = m["CharID"].(uint32)
+	p.WalkSpeed = m["WalkSpeed"].(int16)
+	p.Opt1 = m["Opt1"].(int16)
+	p.Opt2 = m["Opt2"].(int16)
+	p.Option = m["Option"].(int32)
+	p.Type = m["Type"].(int16)
+	p.HairStyle = m["HairStyle"].(int16)
+	p.Weapon = m["Weapon"].(int16)
+	p.Shield = m["Shield"].(int16)
+	p.LowHead = m["LowHead"].(int16)
+	p.Tick = m["Tick"].(uint32)
+	p.TopHead = m["TopHead"].(int16)
+	p.MidHead = m["MidHead"].(int16)
+	p.HairColor = m["HairColor"].(int16)
+	p.ClothesColor = m["ClothesColor"].(int16)
+	p.HeadDir = m["HeadDir"].(int16)
+	p.Costume = m["Costume"].(int16)
+	p.GuildID = m["GuildID"].(uint32)
+	p.EmblemID = m["EmblemID"].(uint16)
+	p.Manner = m["Manner"].(int16)
+	p.Opt3 = m["Opt3"].(int32)
+	p.Stance = m["Stance"].(uint8)
+	p.Sex = m["Sex"].(uint8)
+	coords := m["Coords"].([]uint8)
+	p.CoordX, p.CoordY, p.Direction = BytesToXYDir(coords)
+	p.XSize = m["XSize"].(uint8)
+	p.YSize = m["YSize"].(uint8)
+	p.Lv = m["Lv"].(int16)
+	p.Font = m["Font"].(int16)
+	p.Opt4 = m["Opt4"].(string)
+	p.Name = m["Name"].(string)
+	return nil
+}
+
+//Packet09DC -- PACKET_ZC_ACTOR_EXISTS
+type Packet09DC struct {
+	// PacketLength uint16
+	ObjectType   uint8
+	ID           uint32
+	CharID       uint32
+	WalkSpeed    int16
+	Opt1         int16
+	Opt2         int16
+	Option       int32
+	Type         int16
+	HairStyle    int16
+	Weapon       int16
+	Shield       int16
+	LowHead      int16
+	TopHead      int16
+	MidHead      int16
+	HairColor    int16
+	ClothesColor int16
+	HeadDir      int16
+	Costume      int16
+	GuildID      uint32
+	EmblemID     uint16
+	Manner       int16
+	Opt3         int32
+	Stance       uint8
+	Sex          uint8
+	CoordX       int16
+	CoordY       int16
+	Direction    uint8
+	// Coords string
+	XSize uint8
+	YSize uint8
+	Act   uint8
+	Lv    int16
+	Font  int16
+	Opt4  string
+	Name  string
+}
+
+//Populate the packet
+func (p *Packet09DC) Populate(m map[string]interface{}) error {
+	p.ObjectType = m["ObjectType"].(uint8)
+	p.ID = m["ID"].(uint32)
+	p.CharID = m["CharID"].(uint32)
+	p.WalkSpeed = m["WalkSpeed"].(int16)
+	p.Opt1 = m["Opt1"].(int16)
+	p.Opt2 = m["Opt2"].(int16)
+	p.Option = m["Option"].(int32)
+	p.Type = m["Type"].(int16)
+	p.HairStyle = m["HairStyle"].(int16)
+	p.Weapon = m["Weapon"].(int16)
+	p.Shield = m["Shield"].(int16)
+	p.LowHead = m["LowHead"].(int16)
+	p.TopHead = m["TopHead"].(int16)
+	p.MidHead = m["MidHead"].(int16)
+	p.HairColor = m["HairColor"].(int16)
+	p.ClothesColor = m["ClothesColor"].(int16)
+	p.HeadDir = m["HeadDir"].(int16)
+	p.Costume = m["Costume"].(int16)
+	p.GuildID = m["GuildID"].(uint32)
+	p.EmblemID = m["EmblemID"].(uint16)
+	p.Manner = m["Manner"].(int16)
+	p.Opt3 = m["Opt3"].(int32)
+	p.Stance = m["Stance"].(uint8)
+	p.Sex = m["Sex"].(uint8)
+	coords := m["Coords"].([]uint8)
+	p.CoordX, p.CoordY, p.Direction = BytesToXYDir(coords)
+	p.XSize = m["XSize"].(uint8)
+	p.YSize = m["YSize"].(uint8)
 	p.Lv = m["Lv"].(int16)
 	p.Font = m["Font"].(int16)
 	p.Opt4 = m["Opt4"].(string)
