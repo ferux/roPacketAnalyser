@@ -27,4 +27,4 @@ Incoming traffic should send to this application sniffed packets from ragnarok c
 1. Track all met characters
 1. Zeny per hour
 1. Dropped items from monster
-1. Fill Game object and keep all information about character in web UI
+1. Fill game object and keep all information about character in web UI

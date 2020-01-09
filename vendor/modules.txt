@@ -1,0 +1,17 @@
+# github.com/gen2brain/beeep v0.0.0-20190719094215-ece0cb67ca77
+github.com/gen2brain/beeep
+# github.com/godbus/dbus v4.1.0+incompatible
+github.com/godbus/dbus
+# github.com/gopherjs/gopherjs v0.0.0-20180825215210-0210a2f0f73c
+github.com/gopherjs/gopherjs/js
+# github.com/gopherjs/gopherwasm v1.1.0
+github.com/gopherjs/gopherwasm/js
+# github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
+github.com/nu7hatch/gouuid
+# github.com/tadvi/systray v0.0.0-20190226123456-11a2b8fa57af
+github.com/tadvi/systray
+# golang.org/x/sys v0.0.0-20200107162124-548cf772de50
+golang.org/x/sys/windows
+golang.org/x/sys/windows/registry
+# gopkg.in/toast.v1 v1.0.0-20180812000517-0a84660828b2
+gopkg.in/toast.v1
